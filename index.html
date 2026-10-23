@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChitRagupt —  Inventory &amp; Finance</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- App Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!--
+       SECTION: LOGIN
+   -->
+  <div id="login-screen">
+    <div class="login-box" id="login-box">
+      <div class="login-ornament">🏛️</div>
+      <div class="login-logo">
+        <div class="login-logo-title">CHITR<span>AGUPT</span></div>
+        <div class="login-logo-sub"> Inventory &amp; Finance</div>
+      </div>
+      <div id="login-register-view">
+        <div class="login-welcome">
+          <div class="login-welcome-name">Welcome! Let's set up your account.</div>
+          <div class="login-welcome-sub">Enter your business details to get started</div>
+        </div>
+        <div class="login-field">
+          <label>Business Name</label>
+          <input id="reg-biz" type="text" placeholder="e.g. Sharma General Store" autocomplete="off">
+        </div>
+        <div class="login-field">
+          <label>Owner Name</label>
+          <input id="reg-owner" type="text" placeholder="e.g. Ramesh Sharma" autocomplete="off">
+        </div>
+        <div class="login-field">
+          <label>4-Digit PIN</label>
+          <input id="reg-pin" type="password" maxlength="4" placeholder="Choose a 4-digit PIN" autocomplete="new-password" inputmode="numeric">
+          <div class="login-pin-hint">This PIN will be required every time you open the app.</div>
+        </div>
+        <button class="login-btn" onclick="handleRegister()">🚀 Create Account &amp; Enter</button>
+        <div class="login-error" id="reg-error"></div>
+      </div>
+      <div id="login-pin-view" style="display:none">
+        <div class="login-welcome" id="login-welcome-msg">
+          <div class="login-welcome-name" id="login-biz-name">Welcome Back!</div>
+          <div class="login-welcome-sub" id="login-owner-name">Enter your PIN to continue</div>
+        </div>
+        <div class="login-field">
+          <label>4-Digit PIN</label>
+          <input id="login-pin" type="password" maxlength="4" placeholder="Enter your PIN" autocomplete="off" inputmode="numeric" onkeydown="if(event.key==='Enter')handleLogin()">
+        </div>
+        <button class="login-btn" onclick="handleLogin()">🔓 Unlock &amp; Enter</button>
+        <div class="login-error" id="login-error"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 
+       SECTION: SIDEBAR
+   -->
+  <nav id="sidebar">
+    <div class="logo">
+      <div class="logo-text-wrap">
+        <div class="logo-mark">CHITR<span class="logo-gold">AGUPT</span></div>
+        <div class="logo-sub"> Inventory &amp; Finance</div>
+      </div>
+    </div>
+    <div class="nav-section">Core</div>
+    <div class="nav-item active" data-page="dashboard"><span class="icon">📊</span> Dashboard</div>
+    <div class="nav-item" data-page="pos"><span class="icon">🧾</span> POS / Billing</div>
+    <div class="nav-item" data-page="inventory"><span class="icon">📦</span> Inventory</div>
+    <div class="nav-section">Finance</div>
+    <div class="nav-item" data-page="sales"><span class="icon">📈</span> Sales Analytics</div>
+    <div class="nav-item" data-page="expenses"><span class="icon">💸</span> Expenses</div>
+    <div class="nav-item" data-page="pl"><span class="icon">⚖️</span> Profit &amp; Loss</div>
+    <div class="nav-item" data-page="balance"><span class="icon">🏦</span> Balance Sheet</div>
+    <div class="nav-section">Tax &amp; Bank</div>
+    <div class="nav-item" data-page="gst"><span class="icon">🧮</span> GST Dashboard</div>
+    <div class="nav-item" data-page="cashbook"><span class="icon">💰</span> Bank / Cash Book</div>
+    <div class="nav-section">CRM</div>
+    <div class="nav-item" data-page="customers"><span class="icon">👥</span> Customers</div>
+    <div class="nav-item" data-page="suppliers"><span class="icon">🏭</span> Suppliers</div>
+    <div class="nav-section">Intelligence</div>
+    <div class="nav-item" data-page="forecast"><span class="icon">🔮</span> Demand Forecast</div>
+    <div class="nav-section">System</div>
+    <div class="nav-item" data-page="reports"><span class="icon">📋</span> Reports</div>
+    <div class="nav-item" data-page="calculator"><span class="icon">🧮</span> Calculator</div>
+    <div class="nav-item" data-page="manual"><span class="icon">📖</span> User Manual</div>
+    <div class="nav-item" data-page="settings"><span class="icon">⚙️</span> Settings</div>
+    <div class="nav-item" id="nav-logout" onclick="handleLogout()" style="margin-top:auto;border-top:1px solid rgba(255,255,255,0.10);margin-left:0;margin-right:0;border-radius:0;padding-left:22px;color:rgba(255,255,255,0.55);">
+      <span class="icon">🚪</span> Logout
+    </div>
+  </nav>
+
+  <!--
+       SECTION: MAIN CONTENT AREA
+   -->
+  <div id="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Overview Dashboard</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="topbar-actions" id="topbar-actions"></div>
+        <div class="lang-switch" onclick="handleLangSwitch()" title="Switch Language">
+          <span class="lang-pill" id="lang-pill">EN</span>
+          <span id="lang-label">English</span>
+        </div>
+        <div class="mic-btn" id="topbar-mic-btn" title="Voice Input">
+          🎤
+          <span class="mic-tooltip">Click to speak</span>
+        </div>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+
+  <!--  MODAL  -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal" id="modal-body"></div>
+  </div>
+
+  <!--  TOAST  -->
+  <div id="toast-container"></div>
+
+  <!--  PRINT INVOICE  -->
+  <div id="printable-invoice"></div>
+
+  <!--
+     SECTION: CHATBOT (floating panel)
+   -->
+  <button id="cr-chat-fab" title="Ask ChitRagupt ">🤖</button>
+  <div id="cr-chat-panel">
+    <div id="cr-chat-header">
+      <div class="cr-bot-avatar">🤖</div>
+      <div class="cr-header-info">
+        <div>ChitRagupt </div>
+        <div class="cr-status">● Inventory &amp; Sales Assistant</div>
+      </div>
+    </div>
+    <div id="cr-chat-messages"></div>
+    <div id="cr-chat-input-row">
+      <input id="cr-chat-input" type="text" placeholder="Ask about inventory, sales, profit…">
+      <button id="cr-chat-mic" title="Voice input">🎤</button>
+      <button id="cr-chat-send" title="Send">➤</button>
+    </div>
+  </div>
+
+  <!-- App Script -->
+  <script src="script.js"></script>
+
+</body>
+</html>
