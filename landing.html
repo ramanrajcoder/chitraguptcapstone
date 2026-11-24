@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChitRagupt — Inventory, Billing &amp; Accounts for Local Businesses</title>
+<meta name="description" content="ChitRagupt is a free, browser-based billing, inventory and accounting app for shops and small businesses. GST invoices, credit &amp; advances, returns, aging reports and backups — your data is saved securely online and works on every device.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#203C74;--blue-d:#162b55;--gold:#BD954E;--bg:#F0F2F7;--surface:#fff;--border:#D4DCF0;--text:#1a2540;--text2:#3d5080;--text3:#7a8fb5;--green:#1a7a4a;--red:#c0392b;
+--head:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);color:var(--text);background:var(--bg);line-height:1.6}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:12px;font-weight:600;font-size:15px;border:2px solid transparent;cursor:pointer;transition:.18s;font-family:var(--body)}
+.btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{background:#a8823f;transform:translateY(-2px)}
+.btn-ghost{border-color:rgba(255,255,255,.4);color:#fff}.btn-ghost:hover{background:rgba(255,255,255,.12)}
+.btn-blue{background:var(--blue);color:#fff}.btn-blue:hover{background:var(--blue-d);transform:translateY(-2px)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(22,43,85,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.1)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brand{font-family:var(--head);font-weight:800;font-size:19px;color:#fff;letter-spacing:.5px}.brand span{color:var(--gold)}
+.links{display:flex;gap:26px;align-items:center}
+.links a{color:rgba(255,255,255,.75);font-size:14px;font-weight:500}.links a:hover{color:#fff}
+.links .btn{padding:8px 18px;font-size:14px;color:#fff}
+.burger{display:none;background:none;border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;font-size:20px;padding:2px 10px;cursor:pointer}
+
+/* hero */
+.hero{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-d) 60%,#0d1a35 100%);color:#fff;padding:84px 0 110px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-160px;top:-160px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(189,149,78,.28),transparent 68%)}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;position:relative;z-index:1}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+h1{font-family:var(--head);font-size:clamp(34px,5vw,56px);line-height:1.08;font-weight:800;margin-bottom:20px}
+h1 em{font-style:normal;color:var(--gold)}
+.lead{font-size:18px;color:rgba(255,255,255,.8);max-width:520px;margin-bottom:30px}
+.cta{display:flex;gap:14px;flex-wrap:wrap}
+.hero-note{margin-top:18px;font-size:13px;color:rgba(255,255,255,.6)}
+
+/* hero mock */
+.mock{background:#fff;border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.35);padding:18px;color:var(--text);transform:rotate(1.5deg)}
+.mock-bar{display:flex;gap:6px;margin-bottom:14px}.mock-bar i{width:10px;height:10px;border-radius:50%;background:#e1e6f2}
+.mock-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.ms{border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:10px;padding:10px 12px}
+.ms.g{border-top-color:var(--green)}.ms.r{border-top-color:var(--red)}.ms.o{border-top-color:var(--gold)}
+.ms small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text3)}
+.ms b{font-family:var(--head);font-size:19px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:84px;padding:8px 6px 0;border:1px solid var(--border);border-radius:10px}
+.bars span{flex:1;background:linear-gradient(var(--blue),#3a5fa8);border-radius:4px 4px 0 0}
+.mock-row{display:flex;justify-content:space-between;font-size:12px;padding:8px 2px;border-bottom:1px dashed var(--border)}
+.pill{font-size:10px;padding:2px 9px;border-radius:20px;background:#e6f5ec;color:var(--green);font-weight:600}.pill.y{background:#fff3d6;color:#8a6a1f}
+
+/* sections */
+section{padding:84px 0}
+.sec-head{text-align:center;max-width:680px;margin:0 auto 48px}
+.sec-head .eyebrow{color:var(--gold)}
+h2{font-family:var(--head);font-size:clamp(26px,3.6vw,38px);font-weight:800;color:var(--blue);line-height:1.15;margin-bottom:12px}
+.sec-head p{color:var(--text2);font-size:17px}
+
+/* trust strip */
+.strip{background:#fff;border-bottom:1px solid var(--border);padding:22px 0}
+.strip-in{display:flex;justify-content:space-around;gap:20px;flex-wrap:wrap;text-align:center}
+.strip div{font-size:14px;color:var(--text2);font-weight:500}.strip b{display:block;font-family:var(--head);font-size:20px;color:var(--blue)}
+
+/* features */
+.f-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.f-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:26px;transition:.2s;position:relative;overflow:hidden}
+.f-card::before{content:"";position:absolute;left:0;top:0;height:3px;width:100%;background:linear-gradient(90deg,var(--blue),var(--gold));opacity:0;transition:.2s}
+.f-card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(32,60,116,.12)}.f-card:hover::before{opacity:1}
+.f-ico{width:46px;height:46px;border-radius:12px;background:rgba(32,60,116,.08);display:flex;align-items:center;justify-content:center;font-size:23px;margin-bottom:14px}
+.f-card h3{font-family:var(--head);font-size:17px;color:var(--blue);margin-bottom:8px}
+.f-card p{font-size:14.5px;color:var(--text2);margin-bottom:12px}
+.f-card ul{list-style:none;font-size:13.5px;color:var(--text2)}
+.f-card li{padding-left:18px;position:relative;margin:4px 0}.f-card li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+
+/* split blocks */
+.alt{background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+.split h2{text-align:left}.split p{color:var(--text2);margin-bottom:14px}
+.checks{list-style:none}.checks li{padding:7px 0 7px 30px;position:relative;color:var(--text2)}
+.checks li::before{content:"✓";position:absolute;left:0;top:7px;width:20px;height:20px;border-radius:50%;background:var(--green);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center}
+.panel{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:22px;font-size:13px}
+.ledger-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:12px}
+.ledger-row:last-child{border:0}.ledger-row b{font-weight:500}.dr{color:var(--red)}.cr{color:var(--green)}
+.ok-banner{background:#e6f5ec;color:var(--green);border:1px solid #b9e0c9;border-radius:10px;padding:9px 14px;margin-top:12px;font-weight:600;font-size:13px}
+.aging{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.aging div{background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
+.aging small{display:block;font-family:var(--mono);font-size:10px;color:var(--text3)}.aging b{font-family:var(--head);font-size:15px}
+.aging .hot b{color:var(--red)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s}
+.step{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:24px;position:relative}
+.step::before{counter-increment:s;content:counter(s);display:flex;width:36px;height:36px;border-radius:50%;background:var(--blue);color:#fff;font-family:var(--head);font-weight:700;align-items:center;justify-content:center;margin-bottom:12px}
+.step h3{font-family:var(--head);font-size:16px;color:var(--blue);margin-bottom:6px}.step p{font-size:14px;color:var(--text2)}
+
+/* privacy band */
+.band{background:linear-gradient(135deg,var(--blue),var(--blue-d));color:#fff;border-radius:20px;padding:44px;display:grid;grid-template-columns:1.2fr 1fr;gap:30px;align-items:center}
+.band h2{color:#fff;text-align:left}.band p{color:rgba(255,255,255,.8)}
+.band ul{list-style:none}.band li{padding:8px 0 8px 28px;position:relative;color:rgba(255,255,255,.9);font-size:14.5px}.band li::before{content:"🔒";position:absolute;left:0;font-size:14px}
+
+/* faq */
+.faq{max-width:780px;margin:0 auto}
+details{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600;color:var(--blue);list-style:none;display:flex;justify-content:space-between}
+summary::after{content:"+";font-size:20px;color:var(--gold)}details[open] summary::after{content:"–"}
+details p{margin-top:10px;color:var(--text2);font-size:15px}
+
+/* final cta + footer */
+.final{text-align:center;background:linear-gradient(135deg,var(--blue),#0d1a35);color:#fff;padding:76px 0}
+.final h2{color:#fff}.final p{color:rgba(255,255,255,.75);margin-bottom:26px;font-size:17px}
+footer{background:#0d1a35;color:rgba(255,255,255,.55);font-size:13px;padding:28px 0}
+.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media(max-width:900px){
+ .hero-grid,.split,.band{grid-template-columns:1fr}.mock{transform:none}
+ .f-grid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}
+ .burger{display:block}.links{display:none;position:absolute;top:66px;left:0;right:0;background:var(--blue-d);flex-direction:column;padding:18px 24px;gap:16px;align-items:flex-start}
+ .links.open{display:flex}.hero{padding:56px 0 72px}section{padding:60px 0}.band{padding:30px}
+}
+@media(max-width:560px){.f-grid,.steps{grid-template-columns:1fr}.aging{grid-template-columns:1fr 1fr}.btn{width:100%;justify-content:center}.cta{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav-in">
+  <a class="brand" href="#top">CHITR<span>AGUPT</span></a>
+  <button class="burger" onclick="document.getElementById('lk').classList.toggle('open')" aria-label="Menu">☰</button>
+  <div class="links" id="lk" onclick="this.classList.remove('open')">
+    <a href="#features">Features</a><a href="#accounts">Accounting</a><a href="#how">How it works</a><a href="#privacy">Privacy</a><a href="#faq">FAQ</a>
+    <a class="btn btn-gold" href="index.html">Open App →</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap hero-grid">
+  <div>
+    <div class="eyebrow">Inventory &amp; Finance for local businesses</div>
+    <h1>Bill faster. Track every rupee. <em>Know your books are right.</em></h1>
+    <p class="lead">ChitRagupt brings GST billing, stock, customer credit and real accounting into one simple app — in English and हिंदी, saved securely online so you can use it on any device.</p>
+    <div class="cta"><a class="btn btn-gold" href="index.html">🚀 Get Started — it's free</a><a class="btn btn-ghost" href="#features">See all features</a></div>
+    <div class="hero-note">Create a free account in a minute. No installation. Works on phone, tablet and computer.</div>
+  </div>
+  <div class="mock" aria-hidden="true">
+    <div class="mock-bar"><i></i><i></i><i></i></div>
+    <div class="mock-stats">
+      <div class="ms g"><small>Net sales</small><b>₹84,250</b></div>
+      <div class="ms r"><small>Expenses</small><b>₹21,400</b></div>
+      <div class="ms o"><small>Receivables</small><b>₹12,900</b></div>
+      <div class="ms"><small>Cash &amp; bank</small><b>₹46,120</b></div>
+    </div>
+    <div class="bars"><span style="height:35%"></span><span style="height:55%"></span><span style="height:42%"></span><span style="height:78%"></span><span style="height:60%"></span><span style="height:90%"></span><span style="height:68%"></span></div>
+    <div class="mock-row"><span>INV-2026-0042 · Sharma Traders</span><span class="pill">Paid</span></div>
+    <div class="mock-row"><span>INV-2026-0041 · Walk-in</span><span class="pill">Paid</span></div>
+    <div class="mock-row" style="border:0"><span>INV-2026-0040 · Verma Stores</span><span class="pill y">Credit due</span></div>
+  </div>
+</div></header>
+
+<div class="strip"><div class="wrap strip-in">
+  <div><b>GST-ready</b>CGST/SGST invoices</div><div><b>Split pay</b>Cash · UPI · Card · Credit</div>
+  <div><b>EN + हिंदी</b>one-tap language toggle</div><div><b>Any device</b>log in anywhere, same data</div>
+</div></div>
+
+<section id="features"><div class="wrap">
+  <div class="sec-head"><div class="eyebrow">Features</div><h2>Everything a shop needs, nothing it doesn't</h2>
+    <p>From the billing counter to the balance sheet — one system, one set of numbers.</p></div>
+  <div class="f-grid">
+    <div class="f-card"><div class="f-ico">🧾</div><h3>POS &amp; Billing</h3><p>Fast counter billing with proper tax invoices.</p>
+      <ul><li>Split payments: Cash, UPI, Card, Credit</li><li>Per-item and bill discounts</li><li>Hold &amp; resume bills</li><li>Cash tendered &amp; change calculator</li><li>Sequential INV-2026-0001 numbers</li><li>Amount in words on every invoice</li></ul></div>
+    <div class="f-card"><div class="f-ico">↩️</div><h3>Returns &amp; Credit Notes</h3><p>Handle returns the right way, with a paper trail.</p>
+      <ul><li>Return selected items &amp; quantities</li><li>Numbered credit notes (CN-0001)</li><li>Stock restored, GST &amp; sales reversed</li><li>Refund, reduce pending, or add to advance</li><li>Void bills — kept on record, never deleted</li></ul></div>
+    <div class="f-card"><div class="f-ico">👥</div><h3>Customer Credit &amp; Advances</h3><p>Know who owes what, and who has paid ahead.</p>
+      <ul><li>Customer dashboard with full ledger</li><li>Credit limit warnings or blocks</li><li>Payments clear oldest bills first</li><li>Advance tracker, auto-applied at billing</li><li>Printable statements &amp; WhatsApp reminders</li></ul></div>
+    <div class="f-card"><div class="f-ico">📦</div><h3>Inventory</h3><p>Stay stocked without over-buying.</p>
+      <ul><li>Live stock with every sale &amp; return</li><li>Low-stock and out-of-stock alerts</li><li>Stock adjustments with audit trail</li><li>AI-style demand forecast &amp; reorder alerts</li></ul></div>
+    <div class="f-card"><div class="f-ico">🏦</div><h3>Real Accounting</h3><p>Every entry posts to one ledger — so reports agree.</p>
+      <ul><li>Profit &amp; Loss on net sales (ex-GST)</li><li>Auto-built Balance Sheet</li><li>Cash &amp; Bank book from real receipts</li><li>Red banner if anything is out of balance</li></ul></div>
+    <div class="f-card"><div class="f-ico">🧮</div><h3>GST Dashboard</h3><p>See your tax position at a glance.</p>
+      <ul><li>Output vs input GST, net payable</li><li>Breakup by tax slab (0/5/12/18/28%)</li><li>Returns reduce GST automatically</li><li>Filter by day, month or financial year</li></ul></div>
+    <div class="f-card"><div class="f-ico">⏰</div><h3>Aging &amp; Overdue</h3><p>Chase the right money at the right time.</p>
+      <ul><li>0–30 / 31–60 / 61–90 / 90+ day buckets</li><li>Receivables <i>and</i> supplier payables</li><li>Overdue rows highlighted</li><li>Export to PDF, print or Excel CSV</li></ul></div>
+    <div class="f-card"><div class="f-ico">🏭</div><h3>Suppliers &amp; Expenses</h3><p>Track what you buy and what you spend.</p>
+      <ul><li>Purchase bills with due dates</li><li>Supplier payments hit the cash book</li><li>Categorised expenses</li><li>Void instead of delete</li></ul></div>
+    <div class="f-card"><div class="f-ico">💾</div><h3>Backups &amp; Audit</h3><p>Your records are protected and traceable.</p>
+      <ul><li>Automatic rolling snapshots</li><li>Daily / weekly backup file download</li><li>Validated one-click restore</li><li>Audit log of every create, edit &amp; void</li></ul></div>
+  </div>
+  <div style="text-align:center;margin-top:30px;font-size:15px;color:var(--text2)">Plus: AI chat assistant · voice input · business calculator · printable reports · built-in user manual</div>
+</div></section>
+
+<section class="alt" id="accounts"><div class="wrap split">
+  <div><div class="eyebrow">One source of truth</div><h2>Numbers that always agree</h2>
+    <p>Most small-business tools calculate cash, profit and balances separately on every screen — so they drift apart. ChitRagupt posts every sale, payment, return and expense to a single ledger, and every report reads from it.</p>
+    <ul class="checks"><li>Credit sales are never counted as cash received</li><li>Customer receipts and supplier payments flow into the cash book</li><li>Supplier payables and customer advances show as liabilities</li><li>Built-in reconciliation checks warn you the moment something is off</li></ul></div>
+  <div class="panel" aria-hidden="true">
+    <div class="ledger-row"><span>Sale INV-0042</span><b class="cr">Sales  ₹5,000 Cr</b></div>
+    <div class="ledger-row"><span>GST on sale</span><b class="cr">GST  ₹900 Cr</b></div>
+    <div class="ledger-row"><span>Paid by UPI</span><b class="dr">Bank  ₹3,900 Dr</b></div>
+    <div class="ledger-row"><span>On credit</span><b class="dr">Receivable  ₹2,000 Dr</b></div>
+    <div class="ok-banner">✔ Books reconcile — all checks passed</div>
+    <div class="aging"><div><small>0–30</small><b>₹8,200</b></div><div><small>31–60</small><b>₹3,100</b></div><div class="hot"><small>61–90</small><b>₹1,600</b></div><div class="hot"><small>90+</small><b>₹0</b></div></div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <div class="sec-head"><div class="eyebrow">How it works</div><h2>Up and running in minutes</h2></div>
+  <div class="steps">
+    <div class="step"><h3>Create your account</h3><p>Enter your business name, choose a login id and a password. That's the whole setup. Have old data from an earlier version? Import it once.</p></div>
+    <div class="step"><h3>Add products &amp; customers</h3><p>List your items with price, GST rate and stock. Add regular customers with credit limits.</p></div>
+    <div class="step"><h3>Start billing</h3><p>Tap products, split the payment, print or save the invoice as PDF.</p></div>
+    <div class="step"><h3>Watch your business</h3><p>Profit, GST, cash, overdue payments and stock — always up to date.</p></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0" id="privacy"><div class="wrap"><div class="band">
+  <div><div class="eyebrow">Privacy first</div><h2>Your data is saved securely online</h2>
+    <p>Your bills, customers and ledger are saved to your own account in a secure online database, so you can open your shop from any phone or computer. Passwords are stored only as one-way hashes, and every business can see only its own data.</p></div>
+  <ul><li>Saved online and synced across your devices</li><li>Password login with a protected session</li><li>Download a backup file whenever you like</li><li>Restore only after the file passes validation</li></ul>
+</div></div></section>
+
+<section class="alt" id="faq"><div class="wrap">
+  <div class="sec-head"><div class="eyebrow">FAQ</div><h2>Questions, answered</h2></div>
+  <div class="faq">
+    <details><summary>Do I need to install anything?</summary><p>No. Open the app in any modern browser (Chrome, Edge, Firefox, Safari) on your computer or phone.</p></details>
+    <details><summary>Where is my data stored?</summary><p>In your account's secure online database (Neon Postgres), so it is available on every device you log in from. Your browser also keeps an offline copy while you work. We still recommend downloading a backup file from Settings now and then as an extra safety copy.</p></details>
+    <details><summary>Can I use it for GST invoices?</summary><p>Yes. Each product carries its GST rate, invoices show GST per line and in total, and the GST dashboard summarises output versus input tax. Please confirm filing requirements with your accountant.</p></details>
+    <details><summary>Does it work in Hindi?</summary><p>Yes — switch between English and हिंदी from the top bar for menus, page titles and most labels. More languages can be added.</p></details>
+    <details><summary>What happens if I make a mistake on a bill?</summary><p>Void it. Stock is restored and all accounting effects are reversed, but the bill stays on record, marked VOID, with an entry in the audit log. For returns, issue a credit note.</p></details>
+    <details><summary>Can I move my data to another device?</summary><p>Yes. Just log in with the same login id and password on the other device and your data is there. Data from an older, browser-only version can be imported once after you create your account.</p></details>
+  </div>
+</div></section>
+
+<section class="final"><div class="wrap"><h2>Ready to run your business with confidence?</h2>
+  <p>Open ChitRagupt and create your first bill today.</p><a class="btn btn-gold" href="index.html">Open the App →</a></div></section>
+
+<footer><div class="wrap foot"><span><b style="color:#fff">CHITR<span style="color:var(--gold)">AGUPT</span></b> — Inventory &amp; Finance</span><span>Built with HTML, CSS &amp; JavaScript · Data saved in your secure online account</span></div></footer>
+</body>
+</html>

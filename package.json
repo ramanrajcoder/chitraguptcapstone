@@ -1,0 +1,22 @@
+{
+  "name": "chitragupt",
+  "version": "2.1.0",
+  "private": true,
+  "description": "ChitRagupt - inventory, GST billing and accounting for small Indian shops (hosted edition)",
+  "type": "module",
+  "engines": { "node": "20.x" },
+  "scripts": {
+    "test": "node tests/api.test.mjs",
+    "dev": "node tests/dev-server.mjs",
+    "gen:i18n": "node scripts/generate-i18n.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "1.2.1",
+    "bcryptjs": "3.0.3",
+    "jose": "6.2.18",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.17"
+  }
+}

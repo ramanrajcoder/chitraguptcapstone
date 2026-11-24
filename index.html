@@ -23,43 +23,86 @@
    -->
   <div id="login-screen">
     <div class="login-box" id="login-box">
+      <a href="landing.html" style="position:absolute;top:12px;left:16px;font-size:12px;color:#7a8fb5;text-decoration:none">← Home</a>
       <div class="login-ornament">🏛️</div>
       <div class="login-logo">
         <div class="login-logo-title">CHITR<span>AGUPT</span></div>
         <div class="login-logo-sub"> Inventory &amp; Finance</div>
       </div>
-      <div id="login-register-view">
-        <div class="login-welcome">
-          <div class="login-welcome-name">Welcome! Let's set up your account.</div>
-          <div class="login-welcome-sub">Enter your business details to get started</div>
-        </div>
-        <div class="login-field">
-          <label>Business Name</label>
-          <input id="reg-biz" type="text" placeholder="e.g. Sharma General Store" autocomplete="off">
-        </div>
-        <div class="login-field">
-          <label>Owner Name</label>
-          <input id="reg-owner" type="text" placeholder="e.g. Ramesh Sharma" autocomplete="off">
-        </div>
-        <div class="login-field">
-          <label>4-Digit PIN</label>
-          <input id="reg-pin" type="password" maxlength="4" placeholder="Choose a 4-digit PIN" autocomplete="new-password" inputmode="numeric">
-          <div class="login-pin-hint">This PIN will be required every time you open the app.</div>
-        </div>
-        <button class="login-btn" onclick="handleRegister()">🚀 Create Account &amp; Enter</button>
-        <div class="login-error" id="reg-error"></div>
+      <div class="lang-switch" onclick="handleLangSwitch()" title="Language / भाषा" style="position:absolute;top:10px;right:14px">
+        <span class="lang-pill" data-lang-pill>EN</span>
       </div>
-      <div id="login-pin-view" style="display:none">
-        <div class="login-welcome" id="login-welcome-msg">
-          <div class="login-welcome-name" id="login-biz-name">Welcome Back!</div>
-          <div class="login-welcome-sub" id="login-owner-name">Enter your PIN to continue</div>
+
+      <div id="auth-loading" style="display:block;text-align:center;padding:24px 0;color:#7a8fb5;font-size:14px" data-i18n="auth.loading">Loading…</div>
+
+      <div id="auth-error" style="display:none;text-align:center">
+        <div class="login-welcome-name" data-i18n="auth.err_load_title">Cannot reach the server</div>
+        <div class="login-welcome-sub" style="margin:8px 0 16px" data-i18n="auth.err_load">Check your internet connection and try again.</div>
+        <button class="login-btn" onclick="retryBoot()" data-i18n="auth.retry">Try again</button>
+      </div>
+
+      <div id="auth-login" style="display:none">
+        <div class="login-welcome">
+          <div class="login-welcome-name" data-i18n="auth.welcome_back">Welcome back!</div>
+          <div class="login-welcome-sub" data-i18n="auth.login_sub">Log in to open your shop on any device</div>
         </div>
         <div class="login-field">
-          <label>4-Digit PIN</label>
-          <input id="login-pin" type="password" maxlength="4" placeholder="Enter your PIN" autocomplete="off" inputmode="numeric" onkeydown="if(event.key==='Enter')handleLogin()">
+          <label data-i18n="auth.login_id">Login id</label>
+          <input id="login-id" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()">
         </div>
-        <button class="login-btn" onclick="handleLogin()">🔓 Unlock &amp; Enter</button>
-        <div class="login-error" id="login-error"></div>
+        <div class="login-field">
+          <label data-i18n="auth.password">Password</label>
+          <input id="login-pass" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')handleLogin()">
+        </div>
+        <button class="login-btn" id="login-btn" onclick="handleLogin()" data-i18n="auth.login_btn">🔓 Log in</button>
+        <div class="login-error" id="login-error" role="alert" data-notranslate="1"></div>
+        <div style="text-align:center;font-size:13px;margin-top:6px"><span data-i18n="auth.no_account">New here?</span>
+          <a href="#" onclick="showRegister();return false" style="color:var(--royal-blue);font-weight:600" data-i18n="auth.create_link">Create an account</a></div>
+      </div>
+
+      <div id="auth-register" style="display:none">
+        <div class="login-welcome">
+          <div class="login-welcome-name" data-i18n="auth.reg_title">Create your account</div>
+          <div class="login-welcome-sub" data-i18n="auth.reg_sub">Enter your business details to get started</div>
+        </div>
+        <div class="login-field">
+          <label data-i18n="auth.biz_name">Business name</label>
+          <input id="reg-biz" type="text" maxlength="80" autocomplete="organization" data-i18n-ph="auth.biz_ph" placeholder="e.g. Sharma General Store">
+        </div>
+        <div class="login-field">
+          <label data-i18n="auth.owner_name">Owner name</label>
+          <input id="reg-owner" type="text" maxlength="80" autocomplete="name" data-i18n-ph="auth.owner_ph" placeholder="e.g. Ramesh Sharma">
+        </div>
+        <div class="login-field">
+          <label data-i18n="auth.reg_login_id">Choose a login id</label>
+          <input id="reg-id" type="text" maxlength="40" autocomplete="username" autocapitalize="none" spellcheck="false">
+          <div class="login-pin-hint" data-i18n="auth.reg_login_hint">Letters, numbers and . _ @ + - only. You will use this to log in.</div>
+        </div>
+        <div class="login-field">
+          <label data-i18n="auth.reg_password">Password</label>
+          <input id="reg-pass" type="password" maxlength="72" autocomplete="new-password">
+          <div class="login-pin-hint" data-i18n="auth.reg_password_hint">At least 6 characters. Write it down: there is no password reset yet.</div>
+        </div>
+        <div class="login-field">
+          <label data-i18n="auth.reg_password2">Repeat password</label>
+          <input id="reg-pass2" type="password" maxlength="72" autocomplete="new-password" onkeydown="if(event.key==='Enter')handleRegister()">
+        </div>
+        <button class="login-btn" id="reg-btn" onclick="handleRegister()" data-i18n="auth.reg_btn">🚀 Create account &amp; enter</button>
+        <div class="login-error" id="reg-error" role="alert" data-notranslate="1"></div>
+        <div style="text-align:center;font-size:13px;margin-top:6px"><span data-i18n="auth.have_account">Already have an account?</span>
+          <a href="#" onclick="showLogin();return false" style="color:var(--royal-blue);font-weight:600" data-i18n="auth.back_login">Log in</a></div>
+      </div>
+
+      <div id="auth-import" style="display:none">
+        <div class="login-welcome">
+          <div class="login-welcome-name" data-i18n="auth.import_title">Import my existing local data</div>
+          <div class="login-welcome-sub" id="import-found" data-notranslate="1"></div>
+        </div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.5" data-i18n="auth.import_note">This is a one-time step. Your old data stays untouched in this browser; a copy is saved to your account. Do not import the same data on a second account.</div>
+        <button class="login-btn" id="import-btn" onclick="handleImportLocal()" data-i18n="auth.import_btn">⬆ Import data from this browser</button>
+        <button class="login-btn" style="margin-top:10px;background:#fff;color:var(--royal-blue);border:1px solid var(--royal-blue)" onclick="handleImportFile()" data-i18n="auth.import_file">📁 Import from a backup file instead</button>
+        <div class="login-error" id="import-error" role="alert" data-notranslate="1"></div>
+        <div style="text-align:center;font-size:13px;margin-top:6px"><a href="#" onclick="handleImportSkip();return false" style="color:var(--text3)" data-i18n="auth.import_skip">Skip, start with an empty account</a></div>
       </div>
     </div>
   </div>
@@ -74,30 +117,33 @@
         <div class="logo-sub"> Inventory &amp; Finance</div>
       </div>
     </div>
-    <div class="nav-section">Core</div>
-    <div class="nav-item active" data-page="dashboard"><span class="icon">📊</span> Dashboard</div>
-    <div class="nav-item" data-page="pos"><span class="icon">🧾</span> POS / Billing</div>
-    <div class="nav-item" data-page="inventory"><span class="icon">📦</span> Inventory</div>
-    <div class="nav-section">Finance</div>
-    <div class="nav-item" data-page="sales"><span class="icon">📈</span> Sales Analytics</div>
-    <div class="nav-item" data-page="expenses"><span class="icon">💸</span> Expenses</div>
-    <div class="nav-item" data-page="pl"><span class="icon">⚖️</span> Profit &amp; Loss</div>
-    <div class="nav-item" data-page="balance"><span class="icon">🏦</span> Balance Sheet</div>
-    <div class="nav-section">Tax &amp; Bank</div>
-    <div class="nav-item" data-page="gst"><span class="icon">🧮</span> GST Dashboard</div>
-    <div class="nav-item" data-page="cashbook"><span class="icon">💰</span> Bank / Cash Book</div>
-    <div class="nav-section">CRM</div>
-    <div class="nav-item" data-page="customers"><span class="icon">👥</span> Customers</div>
-    <div class="nav-item" data-page="suppliers"><span class="icon">🏭</span> Suppliers</div>
-    <div class="nav-section">Intelligence</div>
-    <div class="nav-item" data-page="forecast"><span class="icon">🔮</span> Demand Forecast</div>
-    <div class="nav-section">System</div>
-    <div class="nav-item" data-page="reports"><span class="icon">📋</span> Reports</div>
-    <div class="nav-item" data-page="calculator"><span class="icon">🧮</span> Calculator</div>
-    <div class="nav-item" data-page="manual"><span class="icon">📖</span> User Manual</div>
-    <div class="nav-item" data-page="settings"><span class="icon">⚙️</span> Settings</div>
+    <div class="nav-section" data-i18n="sec.core">Core</div>
+    <div class="nav-item active" data-page="dashboard"><span class="icon">📊</span> <span data-i18n="nav.dashboard">Dashboard</span></div>
+    <div class="nav-item" data-page="pos"><span class="icon">🧾</span> <span data-i18n="nav.pos">POS / Billing</span></div>
+    <div class="nav-item" data-page="bills"><span class="icon">📜</span> <span data-i18n="nav.bills">Bill History</span></div>
+    <div class="nav-item" data-page="inventory"><span class="icon">📦</span> <span data-i18n="nav.inventory">Inventory</span></div>
+    <div class="nav-section" data-i18n="sec.finance">Finance</div>
+    <div class="nav-item" data-page="sales"><span class="icon">📈</span> <span data-i18n="nav.sales">Sales Analytics</span></div>
+    <div class="nav-item" data-page="expenses"><span class="icon">💸</span> <span data-i18n="nav.expenses">Expenses</span></div>
+    <div class="nav-item" data-page="pl"><span class="icon">⚖️</span> <span data-i18n="nav.pl">Profit &amp; Loss</span></div>
+    <div class="nav-item" data-page="balance"><span class="icon">🏦</span> <span data-i18n="nav.balance">Balance Sheet</span></div>
+    <div class="nav-item" data-page="aging"><span class="icon">⏰</span> <span data-i18n="nav.aging">Aging &amp; Overdue</span></div>
+    <div class="nav-section" data-i18n="sec.tax">Tax &amp; Bank</div>
+    <div class="nav-item" data-page="gst"><span class="icon">🧮</span> <span data-i18n="nav.gst">GST Dashboard</span></div>
+    <div class="nav-item" data-page="cashbook"><span class="icon">💰</span> <span data-i18n="nav.cashbook">Bank / Cash Book</span></div>
+    <div class="nav-section" data-i18n="sec.crm">CRM</div>
+    <div class="nav-item" data-page="customers"><span class="icon">👥</span> <span data-i18n="nav.customers">Customers</span></div>
+    <div class="nav-item" data-page="suppliers"><span class="icon">🏭</span> <span data-i18n="nav.suppliers">Suppliers</span></div>
+    <div class="nav-section" data-i18n="sec.intel">Intelligence</div>
+    <div class="nav-item" data-page="forecast"><span class="icon">🔮</span> <span data-i18n="nav.forecast">Demand Forecast</span></div>
+    <div class="nav-section" data-i18n="sec.system">System</div>
+    <div class="nav-item" data-page="reports"><span class="icon">📋</span> <span data-i18n="nav.reports">Reports</span></div>
+    <div class="nav-item" data-page="calculator"><span class="icon">🧮</span> <span data-i18n="nav.calculator">Calculator</span></div>
+    <div class="nav-item" data-page="audit"><span class="icon">🕵️</span> <span data-i18n="nav.audit">Audit Log</span></div>
+    <div class="nav-item" data-page="manual"><span class="icon">📖</span> <span data-i18n="nav.manual">User Manual</span></div>
+    <div class="nav-item" data-page="settings"><span class="icon">⚙️</span> <span data-i18n="nav.settings">Settings</span></div>
     <div class="nav-item" id="nav-logout" onclick="handleLogout()" style="margin-top:auto;border-top:1px solid rgba(255,255,255,0.10);margin-left:0;margin-right:0;border-radius:0;padding-left:22px;color:rgba(255,255,255,0.55);">
-      <span class="icon">🚪</span> Logout
+      <span class="icon">🚪</span> <span data-i18n="nav.logout">Logout</span>
     </div>
   </nav>
 
@@ -106,19 +152,22 @@
    -->
   <div id="main">
     <div class="topbar">
-      <div class="topbar-title" id="page-title">Overview Dashboard</div>
+      <div style="display:flex;align-items:center;gap:10px;min-width:0"><button id="menu-toggle" class="menu-toggle" onclick="toggleSidebar()" aria-label="Menu">☰</button><div class="topbar-title" id="page-title">Overview Dashboard</div></div>
       <div style="display:flex;align-items:center;gap:12px">
         <div class="topbar-actions" id="topbar-actions"></div>
-        <div class="lang-switch" onclick="handleLangSwitch()" title="Switch Language">
+        <span id="who-label" class="who-label" data-notranslate="1"></span>
+        <span id="sync-status" class="sync-status ok" role="status" data-notranslate="1"></span>
+        <div class="lang-switch" onclick="handleLangSwitch()" title="Language / भाषा">
           <span class="lang-pill" id="lang-pill">EN</span>
           <span id="lang-label">English</span>
         </div>
         <div class="mic-btn" id="topbar-mic-btn" title="Voice Input">
           🎤
-          <span class="mic-tooltip">Click to speak</span>
+          <span class="mic-tooltip" data-i18n="top.mic">Click to speak</span>
         </div>
       </div>
     </div>
+    <div id="banner-area"></div>
     <div class="content" id="content"></div>
   </div>
 
@@ -153,7 +202,9 @@
     </div>
   </div>
 
-  <!-- App Script -->
+  <!-- App scripts (order matters): language helper, sync/auth layer, then the app -->
+  <script src="i18n.js"></script>
+  <script src="sync.js"></script>
   <script src="script.js"></script>
 
 </body>
